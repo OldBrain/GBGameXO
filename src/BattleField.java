@@ -1,35 +1,44 @@
+import primer.Logic;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class BattleField extends JPanel {
   static final int MODE_H_VS_AI = 0;
   static final int MODE_H_VS_H = 1;
+//  private  GridLayout layout;
   private GameWindow gameWindow;
 
   private int mode;
-  private int fieldSize;
+  private int fieldSize=3;
   private int winningLength;
-  Cells[][] cell =new Cells[3][3];
 
   private boolean isInit;
 
   public BattleField(LayoutManager layout, GameWindow gameWindow) {
     super(layout);
+//    this.layout = new GridLayout(3, 3);
     this.gameWindow = gameWindow;
     initMap();
+
+
+
+//    repaint();
+//    revalidate();
    }
 
+
+
+
+
   public void initMap() {
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++) {
+      Cells[][] cell = new Cells[fieldSize][fieldSize];
+    for (int i = 0; i < fieldSize; i++) {
+      for (int j = 0; j < fieldSize; j++) {
         cell[i][j] = new Cells(i,j);
         add(cell[i][j]);
-
-
       }
-
     }
-
   }
 
 //  public void startNewGame(int mode, int fieldSize, int winningLength) {
@@ -41,6 +50,7 @@ public class BattleField extends JPanel {
     this.winningLength = winningLength;
 
     isInit = true;
-    repaint();
+  initMap();
+  repaint();
   }
 }

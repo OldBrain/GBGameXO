@@ -13,9 +13,12 @@ public class GameWindow extends JFrame {
   JPanel panelForFields;
   JButton buttonNewGame;
   JButton buttonExit;
+  int fieldSize;
 
   private SettingWindow settingWindow;
   private BattleField battleField;
+  private int mode;
+  private int winningLength;
 
   public GameWindow() {
 
@@ -26,6 +29,9 @@ public class GameWindow extends JFrame {
 
     this.settingWindow = new SettingWindow(this);
 
+    battleField = new BattleField(new GridLayout(3,3),this);
+    add(battleField, BorderLayout.CENTER);
+
     panelForButtons = new JPanel(new GridLayout(1,2));
     panelForFields = new JPanel(new GridLayout(SIZE, SIZE));
     buttonNewGame = new JButton("NewGame");
@@ -35,9 +41,13 @@ public class GameWindow extends JFrame {
     panelForButtons.add(buttonNewGame);
     panelForButtons.add(buttonExit);
     add(panelForButtons, BorderLayout.SOUTH);
+
+
+
+
+//    revalidate();
 //    add(panelForFields, BorderLayout.CENTER);
-    battleField = new BattleField(new GridLayout(3,3),this);
-    add(battleField, BorderLayout.CENTER);
+
 
 
     setVisible(true);
@@ -52,8 +62,14 @@ public class GameWindow extends JFrame {
 
 
   }
+private void InitPanel() {
 
+}
   public void startNewGame(int mode, int fieldSize, int winningLength) {
+    this.fieldSize = fieldSize;
+
     battleField.startNewGame(mode, fieldSize, winningLength);
+//
+
   }
 }
