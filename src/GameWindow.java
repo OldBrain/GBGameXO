@@ -16,12 +16,9 @@ public class GameWindow extends JFrame {
   private BattleField battleField;
   private int mode;
   private int winningLength;
+  Computer computer = new Computer();
 
 
-
-  public void setOldFieldSize(int oldFieldSize) {
-    this.oldFieldSize = oldFieldSize;
-  }
 
   public GameWindow() {
 
@@ -30,7 +27,7 @@ public class GameWindow extends JFrame {
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     setTitle("XO GAME");
 
-    this.settingWindow = new SettingWindow(this);
+    this.settingWindow = new SettingWindow(this, computer);
 
     battleField = new BattleField(new GridLayout(fieldSize,fieldSize),this);
 //    add(battleField, BorderLayout.CENTER);
@@ -63,7 +60,9 @@ public class GameWindow extends JFrame {
 
   public void startNewGame(int mode, int fieldSize, int winningLength) {
 
+
     this.fieldSize = fieldSize;
+
     if (battleField.isInit) {
       remove(battleField);
     }

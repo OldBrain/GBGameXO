@@ -11,6 +11,7 @@ public class SettingWindow extends JFrame {
     static final int MAX_FIELD_SIZE = 10;
 
     private GameWindow gameWindow;
+    private Computer computer;
 
     private JRadioButton rbHumVsAi;
     private JRadioButton rbHumVsHum;
@@ -21,8 +22,9 @@ public class SettingWindow extends JFrame {
 
 
 
-    public SettingWindow(GameWindow gameWindow) {
+    public SettingWindow(GameWindow gameWindow,Computer computer) {
         this.gameWindow = gameWindow;
+        this.computer = computer;
         setBounds(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT);
 
         setTitle("Settings");
@@ -72,10 +74,11 @@ public class SettingWindow extends JFrame {
             int fieldSize = slFieldSize.getValue();
             int winningLength = slWiningLength.getValue();
 
-            Logic.SIZE = fieldSize;
-            Logic.DOTS_TO_WIN = winningLength;
-            Logic.initMap();
-            Logic.gameFinished = false;
+            computer.size = fieldSize;
+            computer.dotsToWin = winningLength;
+            computer.initMap();
+            computer.gameFinished = false;
+
 
             gameWindow.startNewGame(mode, fieldSize, winningLength);
 

@@ -1,9 +1,5 @@
-import primer.Logic_Primer;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class BattleField extends JPanel {
   public Cells[][] cell = new Cells[SettingWindow.MAX_FIELD_SIZE][SettingWindow.MAX_FIELD_SIZE];
@@ -19,47 +15,37 @@ public class BattleField extends JPanel {
   public boolean isInit;
   private boolean isInitPanel;
 
-  public static boolean isMotionHuman=true;
+  public boolean isMotionHuman = true;
+
+  private final char DOT_X = 'X';
+  private final char DOT_O = 'O';
+  private final char DOT_EMPTY = 'N';
+
+  public BattleField() {
+
+  }
 
   public BattleField(LayoutManager layout, GameWindow gameWindow) {
     super(layout);
     this.gameWindow = gameWindow;
-    while (!Logic.gameFinished) {
-      if (isMotionHuman) {
-        computerTurn();
-      }
-
-    }
-
-
-
   }
 
-
-
-
-
-
-
-
-
-
-public  void computerTurn() {
-  int[] turn = new int[2];
-  turn = Logic.aiTurn();
-      cell[turn[0]][turn[1]].setText("0");
-  isMotionHuman = true;
+  void computerTurn() {
+    cell[Computer.turnX][Computer.turnY].setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+    cell[Computer.turnX][Computer.turnY].setFont(new Font("", Font.BOLD, 90));
+    cell[Computer.turnX][Computer.turnY].setBackground(Color.darkGray);
+    cell[Computer.turnX][Computer.turnY].setEnabled(false);
+    cell[Computer.turnX][Computer.turnY].setContent(DOT_O);
+    cell[Computer.turnX][Computer.turnY].setText("0");
+    revalidate();
+    isMotionHuman = true;
   }
-
-
-
 
 
   public void initMap(int fieldSize) {
-//      Cells[][] cell = new Cells[fieldSize][fieldSize];
     for (int i = 0; i < fieldSize; i++) {
       for (int j = 0; j < fieldSize; j++) {
-        cell[i][j] = new Cells(i,j,Cells.DOT.N);
+        cell[i][j] = new Cells(i, j, DOT_EMPTY, this);
         add(cell[i][j]);
         isInitPanel = true;
 
@@ -76,21 +62,10 @@ public  void computerTurn() {
     this.fieldSize = fieldSize;
     this.winningLength = winningLength;
     isInit = true;
-
-//    System.out.println(toString());
-
-
-//    System.out.println(cell[1][1].toString());
     initMap(fieldSize);
-  revalidate();
-//  repaint();
-
+    revalidate();
+    Computer.size = fieldSize;
   }
-
-
-
-
-
 
   private void clearingPanel() {
     for (int i = 0; i < this.fieldSize; i++) {
@@ -98,7 +73,7 @@ public  void computerTurn() {
 //        System.out.println(cell[i][j].toString());
         remove(cell[i][j]);
 
-              }
+      }
 
     }
   }

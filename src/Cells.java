@@ -1,5 +1,3 @@
-import primer.Logic_Primer;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,40 +5,47 @@ public class Cells extends JButton {
   private int x;
   private int y;
 
+  private final char DOT_X = 'X';
+  private final char DOT_O = 'O';
+  private final char DOT_EMPTY = 'N';
+  //  Computer computer;
+  BattleField battleField;
 
 
-  public enum DOT {O, X, N,}
 
+  private char content;
 
-  private DOT content;
-
-  public void setContent(DOT content) {
+  public void setContent(char content) {
     this.content = content;
   }
 
-  public Cells(int x, int y, DOT content) {
+  public Cells(int x, int y, char content, BattleField battleField) {
     this.x = x;
     this.y = y;
     this.content = content;
-//    GameWindow.isMotionHuman = true;
+    this.battleField = battleField;
       addActionListener(e -> {
-          humanTurn(x, y, this.content);
-      });
 
+        playerTurn(x, y, DOT_X);
+        battleField.computerTurn();
+        battleField.isMotionHuman = true;
+      });
   }
 
-  public void humanTurn(int x, int y, DOT content) {
-    if (BattleField.isMotionHuman&&!Logic.gameFinished) {
-    if (content == DOT.N) {
-      setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+  public void playerTurn(int x, int y, char turnContent) {
+    if (battleField.isMotionHuman&&!Computer.gameFinished) {
+
+    if (content == DOT_EMPTY) {
+      setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
       setFont(new Font("", Font.BOLD, 90));
       setText("X");
 //      setForeground(Color.blue);
-      setContent(DOT.X);
+      setContent(DOT_X);
       setBackground(Color.lightGray);
       setEnabled(false);
-      Logic.humanTurn(y, x);
-      BattleField.isMotionHuman = false;
+      Computer.humanTurn(y, x);
+      battleField.isMotionHuman = false;
+
     } else {
       System.out.println("Занято!");
     }
@@ -51,23 +56,6 @@ public class Cells extends JButton {
   }
 
 
-  public void setX(int x) {
-    this.x = x;
-
-  }
-
-  public void setY(int y) {
-    this.y = y;
-  }
-
-  public int getXCoordinate() {
-    return x;
-  }
-
-
-  public int getYCoordinate() {
-    return y;
-  }
 
 
 }
