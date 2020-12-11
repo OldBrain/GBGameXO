@@ -10,14 +10,13 @@ public class GameWindow extends JFrame {
   JPanel panelForButtons;
   JButton buttonNewGame;
   JButton buttonExit;
-  private int fieldSize=3;
+  private int fieldSize = 3;
   private int oldFieldSize;
   private SettingWindow settingWindow;
   private BattleField battleField;
   private int mode;
   private int winningLength;
-  Computer computer = new Computer();
-
+//  Computer computer = new Computer();
 
 
   public GameWindow() {
@@ -27,17 +26,17 @@ public class GameWindow extends JFrame {
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     setTitle("XO GAME");
 
-    this.settingWindow = new SettingWindow(this, computer);
+    this.settingWindow = new SettingWindow(this);
 
-    battleField = new BattleField(new GridLayout(fieldSize,fieldSize),this);
+    battleField = new BattleField(new GridLayout(fieldSize, fieldSize), this);
 //    add(battleField, BorderLayout.CENTER);
 
-    panelForButtons = new JPanel(new GridLayout(1,2));
+    panelForButtons = new JPanel(new GridLayout(1, 2));
 //    panelForFields = new JPanel(new GridLayout(3, 3));
     buttonNewGame = new JButton("New Game");
     buttonExit = new JButton("Exit");
-    buttonExit.setBorder(BorderFactory.createLineBorder(Color.BLUE,2));
-    buttonNewGame.setBorder(BorderFactory.createLineBorder(Color.BLUE,2));
+    buttonExit.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+    buttonNewGame.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
     panelForButtons.add(buttonNewGame);
     panelForButtons.add(buttonExit);
     add(panelForButtons, BorderLayout.SOUTH);
@@ -45,13 +44,12 @@ public class GameWindow extends JFrame {
     setVisible(true);
 
 
-
-    buttonExit.addActionListener(e ->{
+    buttonExit.addActionListener(e -> {
       System.exit(0);
-          });
-    buttonNewGame.addActionListener(e ->{
+    });
+    buttonNewGame.addActionListener(e -> {
 
-       settingWindow.setVisible(true);
+      settingWindow.setVisible(true);
 
     });
 
@@ -66,7 +64,7 @@ public class GameWindow extends JFrame {
     if (battleField.isInit) {
       remove(battleField);
     }
-    battleField = new BattleField(new GridLayout(fieldSize,fieldSize),this);
+    battleField = new BattleField(new GridLayout(fieldSize, fieldSize), this);
     add(battleField, BorderLayout.CENTER);
     battleField.startNewGame(mode, fieldSize, winningLength);
 //

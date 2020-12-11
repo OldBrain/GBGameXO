@@ -6,7 +6,7 @@ public class BattleField extends JPanel {
   public Cells[][] cell = new Cells[SettingWindow.MAX_FIELD_SIZE][SettingWindow.MAX_FIELD_SIZE];
   static final int MODE_H_VS_AI = 0;
   static final int MODE_H_VS_H = 1;
- private Random random = new Random();
+  private Random random = new Random();
   private GameWindow gameWindow;
 
   private int mode;
@@ -22,7 +22,7 @@ public class BattleField extends JPanel {
   private final char DOT_O = 'O';
   private final char DOT_EMPTY = 'N';
 
-  private boolean gameFinished;
+  public boolean gameFinished;
 
   public BattleField() {
 
@@ -36,10 +36,10 @@ public class BattleField extends JPanel {
 
   public String who_Won() {
     String who = null;
-    if (checkWinLines(DOT_X,winningLength)) {
-     return " крестики";
+    if (checkWinLines(DOT_X, winningLength)) {
+      return " крестики";
     }
-    if (checkWinLines(DOT_O,winningLength)) {
+    if (checkWinLines(DOT_O, winningLength)) {
       return " нолики";
     }
     return who;
@@ -59,7 +59,7 @@ public class BattleField extends JPanel {
 //    }
 //  }
 
-  void computerTurn(int x,int y) {
+  void computerTurn(int x, int y) {
     cell[x][y].setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
     cell[x][y].setFont(new Font("", Font.BOLD, 90));
     cell[x][y].setBackground(Color.darkGray);
@@ -96,7 +96,6 @@ public class BattleField extends JPanel {
     isInit = true;
     initMap(fieldSize);
     revalidate();
-    Computer.size = fieldSize;
   }
 
   private void clearingPanel() {
@@ -111,9 +110,9 @@ public class BattleField extends JPanel {
   }
 
 
-  public  boolean checkWinLines(char dot, int dotsToWin) {
+  public boolean checkWinLines(char dot, int dotsToWin) {
     for (int i = 0; i < fieldSize; i++) {
-      for (int j = 0; j <fieldSize ; j++) {
+      for (int j = 0; j < fieldSize; j++) {
         if (checkLine(i, j, 0, 1, dot, dotsToWin) ||
             checkLine(i, j, 1, 0, dot, dotsToWin) ||
             checkLine(i, j, 1, 1, dot, dotsToWin) ||
@@ -125,7 +124,7 @@ public class BattleField extends JPanel {
     return false;
   }
 
-  private   boolean checkLine(int cy, int cx, int vy, int vx, char dot, int dotsToWin) {
+  private boolean checkLine(int cy, int cx, int vy, int vx, char dot, int dotsToWin) {
     if (cx + vx * (dotsToWin - 1) > fieldSize - 1 || cy + vy * (dotsToWin - 1) > fieldSize - 1 ||
         cy + vy * (dotsToWin - 1) < 0) {
       return false;
@@ -140,7 +139,7 @@ public class BattleField extends JPanel {
     return true;
   }
 
-  private   boolean isCellValid(int y, int x) {
+  private boolean isCellValid(int y, int x) {
     if (y < 0 || x < 0 || y >= fieldSize || x >= fieldSize) {
       return false;
     }
@@ -161,7 +160,7 @@ public class BattleField extends JPanel {
   public void humanTurn(int x, int y) {
 //    if (isCellValid(y, x)) {
 //      map[y][x] = DOT_X;
-      go();
+    go();
 //    }
   }
 
@@ -224,14 +223,14 @@ public class BattleField extends JPanel {
       x = random.nextInt(fieldSize);
       y = random.nextInt(fieldSize);
     } while (!isCellValid(y, x));
-cell[y][x].setContent(DOT_O);
+    cell[y][x].setContent(DOT_O);
 
 
     computerTurn(y, x);
   }
 
 
-  public  void go() {
+  public void go() {
     gameFinished = true;
 
 //    printMap();
