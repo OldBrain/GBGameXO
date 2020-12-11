@@ -24,6 +24,7 @@ public class GameWindow extends JFrame {
   }
 
   public GameWindow() {
+
     setResizable(false);
     setBounds(MAIN_WINDOW_X, MAIN_WINDOW_Y, MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -46,6 +47,8 @@ public class GameWindow extends JFrame {
 
     setVisible(true);
 
+
+
     buttonExit.addActionListener(e ->{
       System.exit(0);
           });
@@ -57,10 +60,9 @@ public class GameWindow extends JFrame {
 
 
   }
-private void InitPanel() {
 
-}
   public void startNewGame(int mode, int fieldSize, int winningLength) {
+
     this.fieldSize = fieldSize;
     if (battleField.isInit) {
       remove(battleField);

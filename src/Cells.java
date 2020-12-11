@@ -1,3 +1,5 @@
+import primer.Logic_Primer;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -5,16 +7,10 @@ public class Cells extends JButton {
   private int x;
   private int y;
 
+
+
   public enum DOT {O, X, N,}
 
-  @Override
-  public String toString() {
-    return "Cells{" +
-        "x=" + x +
-        ", y=" + y +
-        ", content=" + content +
-        '}';
-  }
 
   private DOT content;
 
@@ -26,12 +22,15 @@ public class Cells extends JButton {
     this.x = x;
     this.y = y;
     this.content = content;
-    addActionListener(e -> {
-      KeyPressed(x, y, this.content);
-    });
+//    GameWindow.isMotionHuman = true;
+      addActionListener(e -> {
+          humanTurn(x, y, this.content);
+      });
+
   }
 
-  private void KeyPressed(int x, int y, DOT content) {
+  public void humanTurn(int x, int y, DOT content) {
+    if (BattleField.isMotionHuman&&!Logic.gameFinished) {
     if (content == DOT.N) {
       setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
       setFont(new Font("", Font.BOLD, 90));
@@ -40,13 +39,17 @@ public class Cells extends JButton {
       setContent(DOT.X);
       setBackground(Color.lightGray);
       setEnabled(false);
+      Logic.humanTurn(y, x);
+      BattleField.isMotionHuman = false;
     } else {
       System.out.println("Занято!");
+    }
 
     }
 
 
   }
+
 
   public void setX(int x) {
     this.x = x;

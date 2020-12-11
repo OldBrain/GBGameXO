@@ -1,9 +1,9 @@
-import primer.Logic;
+import primer.Logic_Primer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.util.Arrays;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class BattleField extends JPanel {
   public Cells[][] cell = new Cells[SettingWindow.MAX_FIELD_SIZE][SettingWindow.MAX_FIELD_SIZE];
@@ -19,12 +19,37 @@ public class BattleField extends JPanel {
   public boolean isInit;
   private boolean isInitPanel;
 
-
+  public static boolean isMotionHuman=true;
 
   public BattleField(LayoutManager layout, GameWindow gameWindow) {
     super(layout);
     this.gameWindow = gameWindow;
-   }
+    while (!Logic.gameFinished) {
+      if (isMotionHuman) {
+        computerTurn();
+      }
+
+    }
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+public  void computerTurn() {
+  int[] turn = new int[2];
+  turn = Logic.aiTurn();
+      cell[turn[0]][turn[1]].setText("0");
+  isMotionHuman = true;
+  }
 
 
 
@@ -44,21 +69,14 @@ public class BattleField extends JPanel {
   }
 
 
-
-
-
-//  public void startNewGame(int mode, int fieldSize, int winningLength) {
-//  }
-
-
-
-
   public void startNewGame(int mode, int fieldSize, int winningLength) {
+    isMotionHuman = true;
     if (isInitPanel) clearingPanel();
     this.mode = mode;
     this.fieldSize = fieldSize;
     this.winningLength = winningLength;
     isInit = true;
+
 //    System.out.println(toString());
 
 

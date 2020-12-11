@@ -10,10 +10,13 @@ public class Logic {
     static final char DOT_EMPTY = '.';
 
     static char[][] map;
+    static int[] compTurn = new int[2];
 
     static Random random = new Random();
 
     static boolean gameFinished;
+
+
 
     public static void go() {
         gameFinished = true;
@@ -69,11 +72,12 @@ public class Logic {
     static void humanTurn(int x, int y) {
         if (isCellValid(y, x)) {
             map[y][x] = DOT_X;
+            System.out.println("Ход человека>"+x+"."+y);
             go();
         }
     }
 
-    static void aiTurn() {
+    public static int[] aiTurn() {
         int x;
         int y;
 
@@ -83,7 +87,10 @@ public class Logic {
                 if (isCellValid(i, j)) {
                     map[i][j] = DOT_O;
                     if (checkWinLines(DOT_O, DOTS_TO_WIN)) {
-                        return;
+                        compTurn[0] = i;
+                        compTurn[1] = j;
+
+                        return compTurn;
                     }
                     map[i][j] = DOT_EMPTY;
                 }
@@ -96,7 +103,9 @@ public class Logic {
                     map[i][j] = DOT_X;
                     if (checkWinLines(DOT_X, DOTS_TO_WIN)) {
                         map[i][j] = DOT_O;
-                        return;
+                        compTurn[0] = i;
+                        compTurn[1] = j;
+                        return compTurn;
                     }
                     map[i][j] = DOT_EMPTY;
                 }
@@ -111,7 +120,9 @@ public class Logic {
                     if (checkWinLines(DOT_X, DOTS_TO_WIN - 1) &&
                             Math.random() < 0.5) { //  фактор случайности, чтобы сбивал не все время первый попавшийся путь.
                         map[i][j] = DOT_O;
-                        return;
+                        compTurn[0] = i;
+                        compTurn[1] = j;
+                        return compTurn;
                     }
                     map[i][j] = DOT_EMPTY;
                 }
@@ -125,6 +136,9 @@ public class Logic {
             y = random.nextInt(SIZE);
         } while (!isCellValid(y, x));
         map[y][x] = DOT_O;
+        compTurn[0] = x;
+        compTurn[1] = y;
+        return compTurn;
     }
 
 
@@ -146,20 +160,7 @@ public class Logic {
         return true;
     }
 
-//    static boolean checkWin(char c) {
-//        if (map[0][0] == c && map[0][1] == c && map[0][2] == c) { return true; }
-//        if (map[1][0] == c && map[1][1] == c && map[1][2] == c) { return true; }
-//        if (map[2][0] == c && map[2][1] == c && map[2][2] == c) { return true; }
-//
-//        if (map[0][0] == c && map[1][0] == c && map[2][0] == c) { return true; }
-//        if (map[0][1] == c && map[1][1] == c && map[2][1] == c) { return true; }
-//        if (map[0][2] == c && map[1][2] == c && map[2][2] == c) { return true; }
-//
-//        if (map[0][0] == c && map[1][1] == c && map[2][2] == c) { return true; }
-//        if (map[0][2] == c && map[1][1] == c && map[2][0] == c) { return true; }
-//
-//        return false;
-//    }
+
 
     static boolean checkLine(int cy, int cx, int vy, int vx, char dot, int dotsToWin) {
         if (cx + vx * (dotsToWin - 1) > SIZE - 1 || cy + vy * (dotsToWin - 1) > SIZE - 1 ||
