@@ -3,6 +3,6 @@ public class Game {
 //      new SettingWindow();
          new GameWindow();
 
-
     }
+
 }

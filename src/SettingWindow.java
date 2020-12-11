@@ -8,7 +8,7 @@ public class SettingWindow extends JFrame {
     private static final int WINDOW_HEIGHT = 400;
 
     private final int MIN_FIELD_SIZE = 3;
-    private final int MAX_FIELD_SIZE = 10;
+    static final int MAX_FIELD_SIZE = 10;
 
     private GameWindow gameWindow;
 
@@ -18,6 +18,8 @@ public class SettingWindow extends JFrame {
 
     private JSlider slFieldSize;
     private JSlider slWiningLength;
+
+
 
     public SettingWindow(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
