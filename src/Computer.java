@@ -18,10 +18,7 @@ public class Computer {
 //  BattleField battleField = new BattleField();
 
 
-  public Computer() {
-//    initMap();
-//    go();
-  }
+
 
   public static void humanTurn(int x, int y) {
     if (isCellValid(y, x)) {
@@ -31,12 +28,7 @@ public class Computer {
   }
 
 
-  public int getTurnX() {
-    return turnX;
-  }
-  public int getTurnY() {
-    return turnY;
-  }
+
 
   public static void go() {
     gameFinished = true;

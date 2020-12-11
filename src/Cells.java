@@ -15,8 +15,14 @@ public class Cells extends JButton {
 
   private char content;
 
+
+
   public void setContent(char content) {
     this.content = content;
+  }
+
+  public char getContent() {
+    return content;
   }
 
   public Cells(int x, int y, char content, BattleField battleField) {
@@ -27,7 +33,7 @@ public class Cells extends JButton {
       addActionListener(e -> {
 
         playerTurn(x, y, DOT_X);
-        battleField.computerTurn();
+//        battleField.computerTurn();
         battleField.isMotionHuman = true;
       });
   }
@@ -43,7 +49,8 @@ public class Cells extends JButton {
       setContent(DOT_X);
       setBackground(Color.lightGray);
       setEnabled(false);
-      Computer.humanTurn(y, x);
+//      Computer.humanTurn(y, x);
+      battleField.humanTurn(y,x);
       battleField.isMotionHuman = false;
 
     } else {

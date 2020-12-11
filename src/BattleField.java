@@ -1,15 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class BattleField extends JPanel {
   public Cells[][] cell = new Cells[SettingWindow.MAX_FIELD_SIZE][SettingWindow.MAX_FIELD_SIZE];
   static final int MODE_H_VS_AI = 0;
   static final int MODE_H_VS_H = 1;
-
+ private Random random = new Random();
   private GameWindow gameWindow;
 
   private int mode;
-  private int fieldSize;
+  int fieldSize;
   private int winningLength;
 
   public boolean isInit;
@@ -21,6 +22,8 @@ public class BattleField extends JPanel {
   private final char DOT_O = 'O';
   private final char DOT_EMPTY = 'N';
 
+  private boolean gameFinished;
+
   public BattleField() {
 
   }
@@ -28,17 +31,46 @@ public class BattleField extends JPanel {
   public BattleField(LayoutManager layout, GameWindow gameWindow) {
     super(layout);
     this.gameWindow = gameWindow;
+
   }
 
-  void computerTurn() {
-    cell[Computer.turnX][Computer.turnY].setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-    cell[Computer.turnX][Computer.turnY].setFont(new Font("", Font.BOLD, 90));
-    cell[Computer.turnX][Computer.turnY].setBackground(Color.darkGray);
-    cell[Computer.turnX][Computer.turnY].setEnabled(false);
-    cell[Computer.turnX][Computer.turnY].setContent(DOT_O);
-    cell[Computer.turnX][Computer.turnY].setText("0");
+  public String who_Won() {
+    String who = null;
+    if (checkWinLines(DOT_X,winningLength)) {
+     return " крестики";
+    }
+    if (checkWinLines(DOT_O,winningLength)) {
+      return " нолики";
+    }
+    return who;
+  }
+
+//  void computerTurn() {
+//    cell[Computer.turnX][Computer.turnY].setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+//    cell[Computer.turnX][Computer.turnY].setFont(new Font("", Font.BOLD, 90));
+//    cell[Computer.turnX][Computer.turnY].setBackground(Color.darkGray);
+//    cell[Computer.turnX][Computer.turnY].setEnabled(false);
+//    cell[Computer.turnX][Computer.turnY].setContent(DOT_O);
+//    cell[Computer.turnX][Computer.turnY].setText("0");
+//    revalidate();
+//    isMotionHuman = true;
+//    if (who_Won() != null) {
+//      System.out.println("Победили" + who_Won());
+//    }
+//  }
+
+  void computerTurn(int x,int y) {
+    cell[x][y].setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+    cell[x][y].setFont(new Font("", Font.BOLD, 90));
+    cell[x][y].setBackground(Color.darkGray);
+    cell[x][y].setEnabled(false);
+    cell[x][y].setContent(DOT_O);
+    cell[x][y].setText("0");
     revalidate();
     isMotionHuman = true;
+    if (who_Won() != null) {
+      System.out.println("Победили" + who_Won());
+    }
   }
 
 
@@ -76,5 +108,153 @@ public class BattleField extends JPanel {
       }
 
     }
+  }
+
+
+  public  boolean checkWinLines(char dot, int dotsToWin) {
+    for (int i = 0; i < fieldSize; i++) {
+      for (int j = 0; j <fieldSize ; j++) {
+        if (checkLine(i, j, 0, 1, dot, dotsToWin) ||
+            checkLine(i, j, 1, 0, dot, dotsToWin) ||
+            checkLine(i, j, 1, 1, dot, dotsToWin) ||
+            checkLine(i, j, -1, 1, dot, dotsToWin)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private   boolean checkLine(int cy, int cx, int vy, int vx, char dot, int dotsToWin) {
+    if (cx + vx * (dotsToWin - 1) > fieldSize - 1 || cy + vy * (dotsToWin - 1) > fieldSize - 1 ||
+        cy + vy * (dotsToWin - 1) < 0) {
+      return false;
+    }
+
+    for (int i = 0; i < dotsToWin; i++) {
+//      if (map[cy + i * vy][cx + i * vx] != dot) {
+      if (cell[cy + i * vy][cx + i * vx].getContent() != dot) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private   boolean isCellValid(int y, int x) {
+    if (y < 0 || x < 0 || y >= fieldSize || x >= fieldSize) {
+      return false;
+    }
+    return cell[y][x].getContent() == DOT_EMPTY;
+  }
+
+  private boolean isFull() {
+    for (int i = 0; i < fieldSize; i++) {
+      for (int j = 0; j < fieldSize; j++) {
+        if (cell[i][j].getContent() == DOT_EMPTY) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  public void humanTurn(int x, int y) {
+//    if (isCellValid(y, x)) {
+//      map[y][x] = DOT_X;
+      go();
+//    }
+  }
+
+  public void aiTurn() {
+    int x;
+    int y;
+
+    // Попытка победить самому
+    for (int i = 0; i < fieldSize; i++) {
+      for (int j = 0; j < fieldSize; j++) {
+        if (isCellValid(i, j)) {
+          cell[i][j].setContent(DOT_O);
+
+          if (checkWinLines(DOT_O, winningLength)) {
+            computerTurn(i, j);
+            return;
+          }
+          cell[i][j].setContent(DOT_EMPTY);
+        }
+      }
+    }
+// Сбить победную линии противника, если осталось 1 ход для победы
+    for (int i = 0; i < fieldSize; i++) {
+      for (int j = 0; j < fieldSize; j++) {
+        if (isCellValid(i, j)) {
+          cell[i][j].setContent(DOT_X);
+          if (checkWinLines(DOT_X, winningLength)) {
+
+            cell[i][j].setContent(DOT_O);
+            computerTurn(i, j);
+
+            return;
+          }
+          cell[i][j].setContent(DOT_EMPTY);
+        }
+      }
+    }
+
+// Сбить победную линии противника, если осталось 2 хода для победы
+    for (int i = 0; i < fieldSize; i++) {
+      for (int j = 0; j < fieldSize; j++) {
+        if (isCellValid(i, j)) {
+          cell[i][j].setContent(DOT_X);
+
+          if (checkWinLines(DOT_X, winningLength - 1) &&
+              Math.random() < 0.5) { //  фактор случайности, чтобы сбивал не все время первый попавшийся путь.
+            cell[i][j].setContent(DOT_O);
+            computerTurn(i, j);
+            return;
+          }
+          cell[i][j].setContent(DOT_EMPTY);
+
+        }
+      }
+    }
+
+// Сходить в произвольную не занятую ячейку
+
+    do {
+      x = random.nextInt(fieldSize);
+      y = random.nextInt(fieldSize);
+    } while (!isCellValid(y, x));
+cell[y][x].setContent(DOT_O);
+
+
+    computerTurn(y, x);
+  }
+
+
+  public  void go() {
+    gameFinished = true;
+
+//    printMap();
+    if (checkWinLines(DOT_X, winningLength)) {
+      System.out.println("Вы выиграли!!!");
+      return;
+    }
+    if (isFull()) {
+      System.out.println("Ничья");
+      return;
+    }
+
+    aiTurn();
+//    printMap();
+    if (checkWinLines(DOT_O, winningLength)) {
+      System.out.println("Комьютер победил");
+      return;
+    }
+    if (isFull()) {
+      System.out.println("Ничья");
+      return;
+    }
+
+    gameFinished = false;
   }
 }
