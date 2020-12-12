@@ -8,6 +8,7 @@ public class BattleField extends JPanel {
   static final int MODE_H_VS_H = 1;
   private Random random = new Random();
   private GameWindow gameWindow;
+  private SettingWindow settingWindow;
 
   private int mode;
   int fieldSize;
@@ -24,9 +25,7 @@ public class BattleField extends JPanel {
 
   public boolean gameFinished;
 
-  public BattleField() {
 
-  }
 
   public BattleField(LayoutManager layout, GameWindow gameWindow) {
     super(layout);
@@ -36,6 +35,11 @@ public class BattleField extends JPanel {
 
   public String who_Won() {
     String who = null;
+    if (isFull()) {
+      return "Ничья.";
+
+    }
+
     if (checkWinLines(DOT_X, winningLength)) {
       return " крестики";
     }
@@ -45,32 +49,18 @@ public class BattleField extends JPanel {
     return who;
   }
 
-//  void computerTurn() {
-//    cell[Computer.turnX][Computer.turnY].setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-//    cell[Computer.turnX][Computer.turnY].setFont(new Font("", Font.BOLD, 90));
-//    cell[Computer.turnX][Computer.turnY].setBackground(Color.darkGray);
-//    cell[Computer.turnX][Computer.turnY].setEnabled(false);
-//    cell[Computer.turnX][Computer.turnY].setContent(DOT_O);
-//    cell[Computer.turnX][Computer.turnY].setText("0");
-//    revalidate();
-//    isMotionHuman = true;
-//    if (who_Won() != null) {
-//      System.out.println("Победили" + who_Won());
-//    }
-//  }
+
 
   void computerTurn(int x, int y) {
     cell[x][y].setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
-    cell[x][y].setFont(new Font("", Font.BOLD, 90));
+    cell[x][y].setFont(new Font("", Font.BOLD, getCntSize(fieldSize)));
     cell[x][y].setBackground(Color.darkGray);
     cell[x][y].setEnabled(false);
     cell[x][y].setContent(DOT_O);
     cell[x][y].setText("0");
     revalidate();
     isMotionHuman = true;
-    if (who_Won() != null) {
-      System.out.println("Победили" + who_Won());
-    }
+
   }
 
 
@@ -158,10 +148,7 @@ public class BattleField extends JPanel {
   }
 
   public void humanTurn(int x, int y) {
-//    if (isCellValid(y, x)) {
-//      map[y][x] = DOT_X;
     go();
-//    }
   }
 
   public void aiTurn() {
@@ -233,27 +220,32 @@ public class BattleField extends JPanel {
   public void go() {
     gameFinished = true;
 
-//    printMap();
     if (checkWinLines(DOT_X, winningLength)) {
-      System.out.println("Вы выиграли!!!");
+      JOptionPane.showMessageDialog(null, "<html><h2>Вы выиграли!!!</h2><i>Нажмите кнопку //New Game// для продолжения игры</i>");
       return;
     }
     if (isFull()) {
-      System.out.println("Ничья");
+      JOptionPane.showMessageDialog(null, "<html><h2>Ничья</h2><i>Нажмите кнопку //New Game// для продолжения игры</i>");
       return;
     }
 
     aiTurn();
-//    printMap();
     if (checkWinLines(DOT_O, winningLength)) {
-      System.out.println("Комьютер победил");
-      return;
-    }
-    if (isFull()) {
-      System.out.println("Ничья");
+      JOptionPane.showMessageDialog(null, "<html><h2>Комьютер победил</h2><i>Нажмите кнопку //New Game// для продолжения игры</i>");
+
       return;
     }
 
     gameFinished = false;
+  }
+
+  public int getCntSize(int fieldSize) {
+    if (fieldSize > 7) {
+      return 40;
+    }
+    if (fieldSize <= 7) {
+      return 90;
+    }
+    return 90;
   }
 }

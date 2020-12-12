@@ -14,12 +14,10 @@ public class GameWindow extends JFrame {
   private int oldFieldSize;
   private SettingWindow settingWindow;
   private BattleField battleField;
-  private int mode;
-  private int winningLength;
-//  Computer computer = new Computer();
 
 
   public GameWindow() {
+
 
     setResizable(false);
     setBounds(MAIN_WINDOW_X, MAIN_WINDOW_Y, MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT);
@@ -29,20 +27,22 @@ public class GameWindow extends JFrame {
     this.settingWindow = new SettingWindow(this);
 
     battleField = new BattleField(new GridLayout(fieldSize, fieldSize), this);
-//    add(battleField, BorderLayout.CENTER);
 
     panelForButtons = new JPanel(new GridLayout(1, 2));
-//    panelForFields = new JPanel(new GridLayout(3, 3));
-    buttonNewGame = new JButton("New Game");
-    buttonExit = new JButton("Exit");
-    buttonExit.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-    buttonNewGame.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+    buttonNewGame = new JButton("<html><h2>New game</h2><i><center> and  settings</center></i>");
+    buttonExit = new JButton("<html><h1>EXIT</h1>");
+    buttonExit.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+    buttonNewGame.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
     panelForButtons.add(buttonNewGame);
     panelForButtons.add(buttonExit);
     add(panelForButtons, BorderLayout.SOUTH);
 
-    setVisible(true);
+    JLabel jLabel = new JLabel();
+    jLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    jLabel.setIcon(new ImageIcon(getClass().getResource("img/fon.jpg")));
+    getContentPane().add(jLabel, java.awt.BorderLayout.CENTER);
 
+    setVisible(true);
 
     buttonExit.addActionListener(e -> {
       System.exit(0);
@@ -58,7 +58,7 @@ public class GameWindow extends JFrame {
 
   public void startNewGame(int mode, int fieldSize, int winningLength) {
 
-
+    battleField.repaint();
     this.fieldSize = fieldSize;
 
     if (battleField.isInit) {
@@ -67,7 +67,6 @@ public class GameWindow extends JFrame {
     battleField = new BattleField(new GridLayout(fieldSize, fieldSize), this);
     add(battleField, BorderLayout.CENTER);
     battleField.startNewGame(mode, fieldSize, winningLength);
-//
 
   }
 }

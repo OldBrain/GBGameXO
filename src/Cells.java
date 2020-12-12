@@ -41,7 +41,7 @@ public class Cells extends JButton {
 
       if (content == DOT_EMPTY) {
         setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
-        setFont(new Font("", Font.BOLD, 90));
+        setFont(new Font("", Font.BOLD, battleField.getCntSize(battleField.fieldSize)));
         setText("X");
 //      setForeground(Color.blue);
         setContent(DOT_X);
